@@ -107,5 +107,5 @@ jobs:
               -e DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }} \
               -e SECRET_KEY=${{ secrets.SECRET_KEY }} \
               -e ALGORITHM=${{ secrets.ALGORITHM }} \
-              -e ACCESS_TOKEN_EXPIRE_MINUTES=${{ secrets.ACCESS_TOKEN_EXPIRE_MINUTES }}
+              -e ACCESS_TOKEN_EXPIRE_MINUTES=${{ secrets.ACCESS_TOKEN_EXPIRE_MINUTES }}\
               ${{ secrets.DOCKER_HUB_USERNAME }}/jjautospa:latest
