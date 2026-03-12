@@ -1,5 +1,4 @@
 name: build and deploy
-
 on: [push, pull_request ]
 
 jobs: 
@@ -8,13 +7,23 @@ jobs:
       name: testing
     env:
       DATABASE_HOSTNAME: ${{secrets.database_hostname}}
+      
+      DATABASE_PORT: ${{secrets.database_port}}
+      DATABASE_NAME: ${{secrets.database_name}}
+      DATABASE_PASSWORD: ${{secrets.database_password}}
+      DATABASE_USERNAME: ${{secrets.database_username}}
+
+      # JWT Authentication
+      SECRET_KEY: ${{secrets.secret_key}}
+      ALGORITHM: ${{secrets.algorithm}}
+      ACCESS_TOKEN_EXPIRE_MINUTES: ${{secrets.access_token_expire_minutes}}
     
     services: 
       mysql:
         image: mysql
         env:
-          MYSQL_PASSWORD: {{}}
-          MYSQL_DB: {{}}
+          MYSQL_PASSWORD: ${{secrets.database_password}}
+          MYSQL_DB: ${{secrets.database_name}}
         ports:
         - 5432:5432
         #options for health checks follow up here
@@ -47,7 +56,7 @@ jobs:
           file: ./Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/fastapi:latest
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/jjautospa:latest
           cache-from: type=local,dest=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
       - name: Image digest
@@ -56,30 +65,30 @@ jobs:
 
 
 
-  deploy:
-    runs-on: ubuntu-latest
-    needs: [build]
-    environment:
-      name: production
+  #deploy:
+    #runs-on: ubuntu-latest
+    #needs: [build]
+    #environment:
+     #name: production
 
-    steps:
-      - name: pulling git repo
-        uses: actions/checkout@v2
-      - name: deploying to heroku
-        uses: akhileshns/heroku-deploy@v3.12.12
-        with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
-          heroku_email: ${{secrets.HEROKU_EMAIL}} 
+    #steps:
+      #- name: pulling git repo
+        #uses: actions/checkout@v2
+      #- name: deploying to heroku
+       # uses: akhileshns/heroku-deploy@v3.12.12
+        #with:
+         # heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+         # heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
+         # heroku_email: ${{secrets.HEROKU_EMAIL}} 
 
 # deploying to heroku server
-      - name: deploy to ubuntu server
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{secrets.PROD_HOST}}
-          username: ${{secrets.PROD_USERNAME}}
-          password: ${{secrets.PROD_PASSWORD}}
-          script: |
-            cd app/src
-            git pull
-            echo ${{secrets.PROD_PASSWORD}} | sudo -S systemctl restart api
+      #- name: deploy to ubuntu server
+        #uses: appleboy/ssh-action@master
+        #with:
+         # host: ${{secrets.PROD_HOST}}
+          #username: ${{secrets.PROD_USERNAME}}
+         # password: ${{secrets.PROD_PASSWORD}}
+          #script: |
+           # cd app/src
+           # git pull
+           # echo ${{secrets.PROD_PASSWORD}} | sudo -S systemctl restart api
