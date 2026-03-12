@@ -24,5 +24,5 @@ app.include_router(sales.router)
 
 @app.get('/')
 def root(): #
-    return {'message': 'hello I have dropped my table'}
+    return {'message': 'updated the read only access'}
 
