@@ -101,5 +101,11 @@ jobs:
               --name jjautospa-app \
               -p 80:8000 \
               -e DATABASE_HOSTNAME=${{ secrets.DATABASE_HOSTNAME }} \
+              -e DATABASE_PORT=${{ secrets.DATABASE_PORT }} \
+              -e DATABASE_NAME=${{ secrets.DATABASE_NAME }} \
+              -e DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }} \
               -e DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }} \
+              -e SECRET_KEY=${{ secrets.SECRET_KEY }} \
+              -e ALGORITHM=${{ secrets.ALGORITHM }} \
+              -e ACCESS_TOKEN_EXPIRE_MINUTES=${{ secrets.ACCESS_TOKEN_EXPIRE_MINUTES }}
               ${{ secrets.DOCKER_HUB_USERNAME }}/jjautospa:latest
