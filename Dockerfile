@@ -15,4 +15,5 @@ COPY . .
 ENV PYTHONPATH=/usr/src/app
 
 # Try to run it using the module path
-CMD ["uvicorn", "app.src.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# We point to the 'app' folder, then the 'main' file, then the 'app' variable
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
