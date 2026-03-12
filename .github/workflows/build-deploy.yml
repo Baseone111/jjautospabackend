@@ -81,6 +81,14 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }} # This must be the .pem content
           port: 22
           script: |
+            if ! [ -x "$(command -v docker)" ]; then
+              echo "Installing Docker..."
+              sudo apt-get update
+              sudo apt-get install -y docker.io
+              sudo systemctl start docker
+              sudo systemctl enable docker
+              sudo usermod -aG docker ubuntu
+            fi
             # Login to Docker using Repository Secrets (if moved) 
             # or hardcoded if you haven't moved them yet
             echo "${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}" | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
